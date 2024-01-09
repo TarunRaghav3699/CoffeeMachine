@@ -66,11 +66,11 @@ def order(choice):
         for key, value in new_dict.items():
             print(key, ":", value)
     else:
-        if resources['water'] < MENU[choice]["ingredients"]["water"]:
+        if new_dict['water'] < MENU[choice]["ingredients"]["water"]:
             print("Sorry there is not enough water.")
-        elif resources['coffee'] < MENU[choice]["ingredients"]["coffee"]:
+        elif new_dict['coffee'] < MENU[choice]["ingredients"]["coffee"]:
             print("Sorry there is not enough coffee.")
-        elif choice != "espresso" and resources['milk'] < MENU[choice]["ingredients"]["milk"]:
+        elif choice != "espresso" and new_dict['milk'] < MENU[choice]["ingredients"]["milk"]:
             print("Sorry there is not enough milk.")
         else:
             coin_store()
@@ -88,12 +88,25 @@ def coin_processing(quarters, dimes, nickles, pennies):
         print("Sorry that's not enough money. Money refunded.")
 
 
+def make_coffee(choice, MENU):
+    element = MENU[choice]["ingredients"]
+    for item in element:
+        new_dict[item] -= element[item]
+        if new_dict[item] < 0:
+            return
+    coin_processing(quarters=quarters, dimes=dimes, nickles=nickles, pennies=pennies)
+
+
+
+
+
 while True:
     choose()
     if choice in ["espresso", "latte", "cappuccino", "report"]:
         order(choice=choice)
         if choice != "report":
-            coin_processing(quarters=quarters, dimes=dimes, nickles=nickles, pennies=pennies)
+            make_coffee(choice, MENU)
+
     else:
         print("Switching off machine.")
         break
